@@ -4,44 +4,47 @@
 
 @layer base {
   :root {
-    --background: 35 25% 96%;
-    --foreground: 25 30% 12%;
+    --background: 0 0% 99%;
+    --foreground: 140 15% 10%;
 
-    --card: 35 20% 93%;
-    --card-foreground: 25 30% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 140 15% 10%;
 
-    --popover: 35 20% 93%;
-    --popover-foreground: 25 30% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 15% 10%;
 
-    --primary: 18 45% 32%;
-    --primary-foreground: 35 30% 95%;
+    --primary: 147 42% 28%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 75 25% 38%;
-    --secondary-foreground: 35 30% 95%;
+    --secondary: 8 72% 50%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 35 15% 88%;
-    --muted-foreground: 25 20% 45%;
+    --muted: 120 8% 94%;
+    --muted-foreground: 140 8% 45%;
 
-    --accent: 35 55% 58%;
-    --accent-foreground: 25 30% 12%;
+    --accent: 42 35% 88%;
+    --accent-foreground: 140 15% 10%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 35 20% 82%;
-    --input: 35 20% 82%;
-    --ring: 18 45% 32%;
+    --border: 120 8% 88%;
+    --input: 120 8% 88%;
+    --ring: 147 42% 28%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Йола brand colors */
-    --yola-earth: #6b3f2a;
-    --yola-olive: #5c6b3a;
-    --yola-sand: #d4b896;
-    --yola-cream: #f5efe6;
-    --yola-bark: #3d2b1a;
-    --yola-sage: #8b9e6b;
-    --yola-terracotta: #c4714a;
+    /* Йола brand palette */
+    --y-green: #2d6a4f;
+    --y-green-light: #40916c;
+    --y-green-pale: #d8f3dc;
+    --y-red: #d62828;
+    --y-red-soft: #e63946;
+    --y-sand: #f5ead0;
+    --y-sand-dark: #e8d5a3;
+    --y-white: #ffffff;
+    --y-dark: #1a2e22;
+    --y-gray: #6b7c6e;
   }
 }
 
@@ -49,52 +52,79 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
     font-family: "Golos Text", sans-serif;
   }
-
   h1,
   h2,
   h3,
   h4 {
-    font-family: "Cormorant Garamond", serif;
+    font-family: "Montserrat", sans-serif;
   }
 }
 
-/* Noise texture overlay */
-.texture-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Organic blob shape */
-.blob-shape {
-  border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
-}
-
-/* Scroll smooth */
 html {
   scroll-behavior: smooth;
 }
 
-/* Fade-in animation */
+/* Diagonal stripe accent — фермерский мотив */
+.stripe-bg {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba(45, 106, 79, 0.04) 10px,
+    rgba(45, 106, 79, 0.04) 20px
+  );
+}
+
+/* Grass divider */
+.grass-divider {
+  position: relative;
+}
+.grass-divider::after {
+  content: "";
+  display: block;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--y-green) 0%,
+    var(--y-green-light) 50%,
+    var(--y-green) 100%
+  );
+}
+
+/* Nav underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--y-red);
+  transition: width 0.25s ease;
+  border-radius: 2px;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(28px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -105,11 +135,10 @@ html {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: fadeInUp 0.7s ease-out forwards;
 }
-
 .animate-fade-in {
-  animation: fadeIn 1.2s ease-out forwards;
+  animation: fadeIn 1s ease-out forwards;
 }
 
 .delay-200 {
@@ -133,23 +162,23 @@ html {
 .carousel-track {
   display: flex;
   gap: 1.5rem;
-  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-/* Nav link hover */
-.nav-link {
-  position: relative;
+/* Badge pill */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
-.nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--yola-sand);
-  transition: width 0.3s ease;
-}
-.nav-link:hover::after {
-  width: 100%;
+
+/* Red leaf mark */
+.leaf-mark::before {
+  content: "🌿";
+  margin-right: 6px;
 }

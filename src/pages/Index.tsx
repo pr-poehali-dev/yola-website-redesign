@@ -1,60 +1,50 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMAGE = "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/03dbfd91-3334-4cc6-b62e-03a0c93009b5.jpg";
+const HERO_IMAGE =
+  "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/03dbfd91-3334-4cc6-b62e-03a0c93009b5.jpg";
+const IMG_MEAT1 =
+  "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/27654ab0-0dde-4408-9cf5-e5078abcffcd.jpg";
+const IMG_MEAT2 =
+  "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/0f95dd7c-5c02-466b-bd5a-a3bb478c237d.jpg";
 
 const PRODUCTS = [
-  {
-    id: 1,
-    name: "Говядина мраморная",
-    desc: "Отборная говядина с пастбищного откорма, богатая вкусом и ароматом",
-    img: "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/27654ab0-0dde-4408-9cf5-e5078abcffcd.jpg",
-    tag: "Премиум",
-  },
-  {
-    id: 2,
-    name: "Стейки и отбивные",
-    desc: "Идеальная нарезка для гриля — из животных, выращенных на натуральном корме",
-    img: "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/0f95dd7c-5c02-466b-bd5a-a3bb478c237d.jpg",
-    tag: "Для гриля",
-  },
-  {
-    id: 3,
-    name: "Фермерские колбасы",
-    desc: "Ручное производство без консервантов, по старинным рецептам",
-    img: "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/27654ab0-0dde-4408-9cf5-e5078abcffcd.jpg",
-    tag: "Ремесленное",
-  },
-  {
-    id: 4,
-    name: "Свинина фермерская",
-    desc: "Нежное мясо от свиней свободного выгула на экологически чистых угодьях",
-    img: "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/0f95dd7c-5c02-466b-bd5a-a3bb478c237d.jpg",
-    tag: "Натуральное",
-  },
-  {
-    id: 5,
-    name: "Баранина",
-    desc: "Молодая баранина с горных пастбищ — нежная, ароматная, полезная",
-    img: "https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/27654ab0-0dde-4408-9cf5-e5078abcffcd.jpg",
-    tag: "Деликатес",
-  },
+  { id: 1, name: "Говядина мраморная",  desc: "Пастбищный откорм, насыщенный вкус и аромат",      img: IMG_MEAT1, tag: "Премиум" },
+  { id: 2, name: "Стейки и отбивные",   desc: "Идеальная нарезка для гриля, натуральный корм",     img: IMG_MEAT2, tag: "Для гриля" },
+  { id: 3, name: "Фермерские колбасы",  desc: "Ручное производство, без консервантов",             img: IMG_MEAT1, tag: "Ремесленное" },
+  { id: 4, name: "Свинина фермерская",  desc: "Свободный выгул, экологически чистые угодья",       img: IMG_MEAT2, tag: "Натуральное" },
+  { id: 5, name: "Баранина",            desc: "Горные пастбища, молодое и нежное мясо",            img: IMG_MEAT1, tag: "Деликатес" },
 ];
 
 const STORES = [
-  { name: "Магазин «Йола» на Ленина", address: "ул. Ленина, 45" },
-  { name: "Фирменный отдел ТЦ Центральный", address: "пр. Октябрьский, 12" },
-  { name: "Магазин «Йола» на Мира", address: "ул. Мира, 78" },
+  { name: "Магазин «Йола» на Ленина",       address: "ул. Ленина, 45",        hours: "9:00 – 21:00" },
+  { name: "Фирменный отдел ТЦ Центральный", address: "пр. Октябрьский, 12",   hours: "10:00 – 22:00" },
+  { name: "Магазин «Йола» на Мира",         address: "ул. Мира, 78",          hours: "9:00 – 20:00" },
 ];
+
+const FILTERS = ["Все", "Премиум", "Для гриля", "Ремесленное", "Натуральное", "Деликатес"];
+
+const STATS = [
+  { num: "15+",  label: "лет на рынке",       icon: "Award" },
+  { num: "2000", label: "га экопастбищ",       icon: "Leaf" },
+  { num: "30+",  label: "видов продукции",     icon: "Package" },
+  { num: "100%", label: "натуральный продукт", icon: "ShieldCheck" },
+];
+
+const G  = "var(--y-green)";
+const GL = "var(--y-green-light)";
+const GP = "var(--y-green-pale)";
+const R  = "var(--y-red)";
+const D  = "var(--y-dark)";
+const GR = "var(--y-gray)";
 
 export default function Index() {
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [activeFilter, setActiveFilter] = useState("Все");
+  const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  const filters = ["Все", "Премиум", "Для гриля", "Ремесленное", "Натуральное", "Деликатес"];
   const filtered = activeFilter === "Все" ? PRODUCTS : PRODUCTS.filter(p => p.tag === activeFilter);
-
   const visibleCount = 3;
   const maxIdx = Math.max(0, filtered.length - visibleCount);
 
@@ -66,154 +56,171 @@ export default function Index() {
   useEffect(() => {
     const handleScroll = () => {
       if (heroRef.current) {
-        const scrolled = window.scrollY;
-        const el = heroRef.current.querySelector('.hero-bg') as HTMLElement;
-        if (el) el.style.transform = `translateY(${scrolled * 0.3}px)`;
+        const el = heroRef.current.querySelector(".hero-bg") as HTMLElement;
+        if (el) el.style.transform = `translateY(${window.scrollY * 0.28}px)`;
       }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--yola-cream)', color: 'var(--yola-bark)' }}>
+    <div style={{ background: "#fff", color: D, fontFamily: "'Golos Text', sans-serif" }}>
 
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4"
-        style={{ background: 'rgba(61,43,26,0.88)', backdropFilter: 'blur(12px)' }}>
-        <div className="flex items-center gap-2">
-          <span className="text-3xl font-bold tracking-wider"
-            style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--yola-sand)' }}>
-            ЙОЛА
-          </span>
-          <span className="text-xs tracking-widest uppercase ml-2"
-            style={{ color: 'var(--yola-sage)', marginTop: '4px' }}>Аграхолдинг</span>
+      <nav style={{ background: G, position: "fixed", top: 0, left: 0, right: 0, zIndex: 50 }}>
+        <div style={{ height: "4px", background: `linear-gradient(90deg, ${R} 0%, #f4a261 50%, ${R} 100%)` }} />
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "66px" }}>
+          {/* Logo */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ width: "40px", height: "40px", background: R, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: "20px" }}>🌿</span>
+            </div>
+            <div>
+              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "20px", color: "#fff", letterSpacing: "0.05em", lineHeight: 1 }}>ЙОЛА</div>
+              <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.6)", letterSpacing: "0.15em", textTransform: "uppercase" }}>Аграхолдинг</div>
+            </div>
+          </div>
+
+          {/* Links */}
+          <div className="hidden md:flex" style={{ gap: "32px", alignItems: "center" }}>
+            {(["#segments", "#catalog", "#about", "#stores"] as const).map((href, i) => (
+              <a key={href} href={href} className="nav-link"
+                style={{ color: "rgba(255,255,255,0.88)", fontSize: "14px", fontWeight: 500, textDecoration: "none" }}>
+                {["Покупателям", "Продукция", "О нас", "Магазины"][i]}
+              </a>
+            ))}
+          </div>
+
+          <a href="#segments"
+            style={{ background: R, color: "#fff", padding: "10px 22px", borderRadius: "6px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}
+            className="hidden md:inline-block">
+            Сделать выбор
+          </a>
+
+          <button className="flex md:hidden" onClick={() => setMenuOpen(o => !o)}
+            style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+            <Icon name={menuOpen ? "X" : "Menu"} size={24} />
+          </button>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm tracking-wide"
-          style={{ color: 'var(--yola-sand)' }}>
-          <a href="#segments" className="nav-link hover:opacity-80 transition-opacity">Покупателям</a>
-          <a href="#catalog" className="nav-link hover:opacity-80 transition-opacity">Продукция</a>
-          <a href="#about" className="nav-link hover:opacity-80 transition-opacity">О нас</a>
-          <a href="#stores" className="nav-link hover:opacity-80 transition-opacity">Магазины</a>
-        </div>
-        <a href="#segments"
-          className="px-5 py-2 text-sm font-medium tracking-wide transition-all hover:opacity-90 hover:scale-105"
-          style={{ background: 'var(--yola-terracotta)', color: '#fff', borderRadius: '50px' }}>
-          Сделать выбор
-        </a>
+
+        {menuOpen && (
+          <div style={{ background: D, padding: "16px 24px 20px" }}>
+            {(["#segments", "#catalog", "#about", "#stores"] as const).map((href, i) => (
+              <a key={href} href={href} onClick={() => setMenuOpen(false)}
+                style={{ display: "block", color: "#fff", padding: "10px 0", fontSize: "15px", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                {["Покупателям", "Продукция", "О нас", "Магазины"][i]}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="relative h-screen overflow-hidden texture-overlay" id="hero">
-        <div className="hero-bg absolute inset-0 will-change-transform">
+      <section ref={heroRef} id="hero" style={{ position: "relative", height: "100vh", overflow: "hidden", marginTop: "70px" }}>
+        <div className="hero-bg" style={{ position: "absolute", inset: 0, willChange: "transform" }}>
           <img src={HERO_IMAGE} alt="Пастбища Йолы"
-            className="w-full h-full object-cover scale-110"
-            style={{ transformOrigin: 'center top' }} />
+            style={{ width: "100%", height: "110%", objectFit: "cover", objectPosition: "center 30%" }} />
         </div>
-        <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(61,43,26,0.3) 0%, rgba(61,43,26,0.05) 40%, rgba(61,43,26,0.75) 100%)' }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(26,46,34,0.85) 0%, rgba(26,46,34,0.45) 60%, transparent 100%)" }} />
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "5px", background: G, zIndex: 2 }} />
 
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6"
-          style={{ paddingTop: '80px' }}>
-          <p className="animate-fade-in-up delay-200 text-xs tracking-[0.4em] uppercase mb-6"
-            style={{ color: 'var(--yola-sand)', opacity: 0 }}>
-            Натуральное · Экологичное · Своё
-          </p>
-          <h1 className="animate-fade-in-up delay-400 text-6xl md:text-8xl font-light italic mb-4"
-            style={{ color: '#fff', opacity: 0, fontFamily: 'Cormorant Garamond, serif', lineHeight: 1.1 }}>
-            С пастбища<br />
-            <span style={{ color: 'var(--yola-sand)' }}>на ваш стол</span>
+        <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 6vw", maxWidth: "680px" }}>
+          <div className="animate-fade-in-up delay-200"
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: R, color: "#fff", padding: "5px 14px", borderRadius: "4px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "22px", width: "fit-content", opacity: 0 }}>
+            🌿 Экологически чистое производство
+          </div>
+          <h1 className="animate-fade-in-up delay-400"
+            style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5.5vw, 68px)", color: "#fff", lineHeight: 1.12, margin: "0 0 18px", opacity: 0 }}>
+            Мясо с фермы —<br />
+            <span style={{ color: "#74c69d" }}>прямо к вашему столу</span>
           </h1>
-          <p className="animate-fade-in-up delay-600 max-w-xl text-lg mb-10 font-light"
-            style={{ color: 'rgba(245,239,230,0.85)', opacity: 0 }}>
-            Аграхолдинг Йола — живое хозяйство, где каждое животное растёт на свободных лугах и чистом воздухе
+          <p className="animate-fade-in-up delay-600"
+            style={{ color: "rgba(255,255,255,0.78)", fontSize: "17px", lineHeight: 1.65, marginBottom: "34px", maxWidth: "460px", opacity: 0 }}>
+            Аграхолдинг Йола — натуральная мясная продукция с пастбищ Республики Марий Эл. Без химии, с заботой о природе.
           </p>
-          <a href="#segments"
-            className="animate-fade-in-up delay-800 inline-flex items-center gap-3 px-10 py-4 text-base font-medium tracking-wide transition-all hover:scale-105 hover:shadow-2xl"
-            style={{ background: 'var(--yola-terracotta)', color: '#fff', borderRadius: '50px', opacity: 0 }}>
-            Сделать выбор
-            <Icon name="ArrowDown" size={18} />
-          </a>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-          <div className="w-6 h-10 border-2 rounded-full flex items-start justify-center p-1"
-            style={{ borderColor: 'rgba(212,184,150,0.6)' }}>
-            <div className="w-1 h-3 rounded-full" style={{ background: 'var(--yola-sand)' }} />
+          <div className="animate-fade-in-up delay-800" style={{ display: "flex", gap: "12px", flexWrap: "wrap", opacity: 0 }}>
+            <a href="#segments"
+              style={{ background: R, color: "#fff", padding: "14px 30px", borderRadius: "6px", fontWeight: 700, fontSize: "15px", textDecoration: "none", display: "flex", alignItems: "center", gap: "8px" }}>
+              Сделать выбор <Icon name="ArrowRight" size={18} />
+            </a>
+            <a href="#catalog"
+              style={{ background: "rgba(255,255,255,0.14)", color: "#fff", padding: "14px 28px", borderRadius: "6px", fontWeight: 600, fontSize: "15px", textDecoration: "none", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.22)" }}>
+              Каталог продукции
+            </a>
           </div>
         </div>
       </section>
 
-      {/* B2B / B2C */}
-      <section id="segments" className="py-24 px-6" style={{ background: 'var(--yola-cream)' }}>
-        <div className="max-w-6xl mx-auto">
-          <p className="text-center text-xs tracking-[0.4em] uppercase mb-3"
-            style={{ color: 'var(--yola-terracotta)' }}>Выберите свой путь</p>
-          <h2 className="text-center text-5xl font-light italic mb-16"
-            style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Для кого мы работаем
-          </h2>
+      {/* STATS BAR */}
+      <div style={{ background: D, padding: "28px 24px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px" }}>
+          {STATS.map(s => (
+            <div key={s.label} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "8px 12px" }}>
+              <div style={{ width: "42px", height: "42px", background: "rgba(116,198,157,0.12)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Icon name={s.icon} size={20} style={{ color: "#74c69d" }} />
+              </div>
+              <div>
+                <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "22px", color: "#fff", lineHeight: 1 }}>{s.num}</div>
+                <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "2px" }}>{s.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+      {/* B2B / B2C */}
+      <section id="segments" style={{ background: "#fff", padding: "80px 24px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <p style={{ color: R, fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>Для кого мы работаем</p>
+            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(26px, 4vw, 42px)", color: D, margin: 0 }}>Выберите свой формат</h2>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
             {/* B2C */}
-            <div className="relative overflow-hidden group cursor-pointer rounded-3xl p-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1"
-              style={{ background: 'linear-gradient(135deg, #6B3F2A 0%, #3D2B1A 100%)' }}>
-              <div className="absolute top-0 right-0 w-64 h-64 blob-shape opacity-10"
-                style={{ background: 'var(--yola-sand)', transform: 'translate(30%, -30%)' }} />
-              <div className="relative z-10">
-                <span className="inline-block text-xs tracking-widest uppercase px-3 py-1 rounded-full mb-6"
-                  style={{ background: 'rgba(212,184,150,0.2)', color: 'var(--yola-sand)' }}>
-                  Частным покупателям
-                </span>
-                <h3 className="text-4xl font-light italic mb-4"
-                  style={{ color: '#fff', fontFamily: 'Cormorant Garamond, serif' }}>
-                  Свежее мясо<br />для вашей семьи
-                </h3>
-                <p className="mb-8 font-light" style={{ color: 'rgba(245,239,230,0.75)' }}>
-                  Покупайте натуральную фермерскую продукцию напрямую. Никаких посредников — только свежесть с пастбища.
-                </p>
-                <div className="flex flex-col gap-3 mb-10">
-                  {["Доставка по городу", "Фирменные магазины", "Гарантия свежести"].map(f => (
-                    <div key={f} className="flex items-center gap-2 text-sm" style={{ color: 'var(--yola-sand)' }}>
-                      <Icon name="Check" size={16} />
-                      {f}
+            <div style={{ border: `2px solid ${G}`, borderRadius: "12px", overflow: "hidden", cursor: "pointer", transition: "transform .25s, box-shadow .25s" }}
+              onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 40px rgba(45,106,79,0.14)"; }}
+              onMouseOut={e => { const el = e.currentTarget as HTMLElement; el.style.transform = ""; el.style.boxShadow = ""; }}>
+              <div style={{ background: G, padding: "24px 28px 18px" }}>
+                <span style={{ background: "rgba(255,255,255,0.15)", color: "#fff", padding: "3px 12px", borderRadius: "4px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Частным покупателям</span>
+                <h3 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "26px", color: "#fff", margin: "14px 0 0" }}>Свежее мясо<br />для семьи</h3>
+              </div>
+              <div style={{ padding: "22px 28px 28px" }}>
+                <p style={{ color: GR, fontSize: "15px", lineHeight: 1.6, marginBottom: "18px" }}>Покупайте натуральную фермерскую продукцию напрямую. Никаких посредников — только свежесть с пастбища.</p>
+                {["Доставка по городу", "Фирменные магазины", "Гарантия свежести"].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", fontSize: "14px", color: D }}>
+                    <div style={{ width: "20px", height: "20px", background: GP, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Icon name="Check" size={12} style={{ color: G }} />
                     </div>
-                  ))}
-                </div>
-                <button className="px-8 py-3 text-sm font-medium tracking-wide rounded-full transition-all group-hover:shadow-lg hover:opacity-90"
-                  style={{ background: 'var(--yola-sand)', color: 'var(--yola-bark)' }}>
-                  В магазин →
+                    {f}
+                  </div>
+                ))}
+                <button style={{ marginTop: "18px", width: "100%", background: G, color: "#fff", padding: "13px", borderRadius: "7px", border: "none", fontWeight: 700, fontSize: "14px", cursor: "pointer" }}>
+                  Перейти в каталог →
                 </button>
               </div>
             </div>
 
             {/* B2B */}
-            <div className="relative overflow-hidden group cursor-pointer rounded-3xl p-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1"
-              style={{ background: 'linear-gradient(135deg, #5C6B3A 0%, #3A4525 100%)' }}>
-              <div className="absolute top-0 right-0 w-64 h-64 blob-shape opacity-10"
-                style={{ background: 'var(--yola-sage)', transform: 'translate(30%, -30%)' }} />
-              <div className="relative z-10">
-                <span className="inline-block text-xs tracking-widest uppercase px-3 py-1 rounded-full mb-6"
-                  style={{ background: 'rgba(139,158,107,0.25)', color: 'var(--yola-sage)' }}>
-                  Для бизнеса
-                </span>
-                <h3 className="text-4xl font-light italic mb-4"
-                  style={{ color: '#fff', fontFamily: 'Cormorant Garamond, serif' }}>
-                  Оптовые<br />поставки
-                </h3>
-                <p className="mb-8 font-light" style={{ color: 'rgba(245,239,230,0.75)' }}>
-                  Рестораны, кафе, отели и ретейл — мы обеспечиваем стабильные поставки экологически чистой продукции по договору.
-                </p>
-                <div className="flex flex-col gap-3 mb-10">
-                  {["Оптовые объёмы и цены", "Постоянный ассортимент", "Договор и сертификаты"].map(f => (
-                    <div key={f} className="flex items-center gap-2 text-sm" style={{ color: 'var(--yola-sage)' }}>
-                      <Icon name="Check" size={16} />
-                      {f}
+            <div style={{ border: `2px solid ${R}`, borderRadius: "12px", overflow: "hidden", cursor: "pointer", transition: "transform .25s, box-shadow .25s" }}
+              onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 40px rgba(214,40,40,0.12)"; }}
+              onMouseOut={e => { const el = e.currentTarget as HTMLElement; el.style.transform = ""; el.style.boxShadow = ""; }}>
+              <div style={{ background: R, padding: "24px 28px 18px" }}>
+                <span style={{ background: "rgba(255,255,255,0.15)", color: "#fff", padding: "3px 12px", borderRadius: "4px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>Для бизнеса / B2B</span>
+                <h3 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "26px", color: "#fff", margin: "14px 0 0" }}>Оптовые<br />поставки</h3>
+              </div>
+              <div style={{ padding: "22px 28px 28px" }}>
+                <p style={{ color: GR, fontSize: "15px", lineHeight: 1.6, marginBottom: "18px" }}>Рестораны, кафе, отели и ретейл — стабильные поставки экологически чистой продукции по договору.</p>
+                {["Оптовые объёмы и цены", "Постоянный ассортимент", "Договор и сертификаты"].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", fontSize: "14px", color: D }}>
+                    <div style={{ width: "20px", height: "20px", background: "#fde8e8", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Icon name="Check" size={12} style={{ color: R }} />
                     </div>
-                  ))}
-                </div>
-                <button className="px-8 py-3 text-sm font-medium tracking-wide rounded-full transition-all group-hover:shadow-lg hover:opacity-90"
-                  style={{ background: 'var(--yola-sage)', color: '#fff' }}>
+                    {f}
+                  </div>
+                ))}
+                <button style={{ marginTop: "18px", width: "100%", background: R, color: "#fff", padding: "13px", borderRadius: "7px", border: "none", fontWeight: 700, fontSize: "14px", cursor: "pointer" }}>
                   Запросить условия →
                 </button>
               </div>
@@ -222,53 +229,40 @@ export default function Index() {
         </div>
       </section>
 
-      {/* КАТАЛОГ / КАРУСЕЛЬ */}
-      <section id="catalog" className="py-24 px-6" style={{ background: '#EDE5D8' }}>
-        <div className="max-w-6xl mx-auto">
-          <p className="text-center text-xs tracking-[0.4em] uppercase mb-3"
-            style={{ color: 'var(--yola-terracotta)' }}>Прямо с фермы</p>
-          <h2 className="text-center text-5xl font-light italic mb-10"
-            style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Наша продукция
-          </h2>
+      {/* CATALOG */}
+      <section id="catalog" className="stripe-bg" style={{ padding: "80px 24px", background: "#f7fcf8" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "36px" }}>
+            <p style={{ color: R, fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>Прямо с фермы</p>
+            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(26px, 4vw, 42px)", color: D, margin: 0 }}>Наша продукция</h2>
+          </div>
 
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
-            {filters.map(f => (
-              <button key={f}
-                onClick={() => setActiveFilter(f)}
-                className="px-5 py-2 text-sm rounded-full transition-all hover:shadow-md"
-                style={{
-                  background: activeFilter === f ? 'var(--yola-earth)' : 'rgba(107,63,42,0.1)',
-                  color: activeFilter === f ? '#fff' : 'var(--yola-earth)',
-                }}>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px", marginBottom: "36px" }}>
+            {FILTERS.map(f => (
+              <button key={f} onClick={() => setActiveFilter(f)}
+                style={{ padding: "7px 18px", borderRadius: "5px", border: `2px solid ${activeFilter === f ? G : "rgba(45,106,79,0.2)"}`, background: activeFilter === f ? G : "#fff", color: activeFilter === f ? "#fff" : G, fontWeight: 600, fontSize: "13px", cursor: "pointer", transition: "all .2s" }}>
                 {f}
               </button>
             ))}
           </div>
 
-          <div className="relative overflow-hidden">
-            <div className="carousel-track"
-              style={{ transform: `translateX(calc(-${carouselIdx} * (100% / ${visibleCount} + 0.5rem)))` }}>
+          <div style={{ position: "relative", overflow: "hidden" }}>
+            <div className="carousel-track" style={{ transform: `translateX(calc(-${carouselIdx} * (100% / ${visibleCount} + 0.5rem)))` }}>
               {filtered.map(p => (
                 <div key={p.id}
-                  className="flex-shrink-0 rounded-2xl overflow-hidden group cursor-pointer"
-                  style={{ width: `calc(${100 / visibleCount}% - 1rem)`, background: '#fff', minWidth: '260px' }}>
-                  <div className="relative overflow-hidden" style={{ height: '240px' }}>
-                    <img src={p.img} alt={p.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <span className="absolute top-4 left-4 text-xs tracking-wide px-3 py-1 rounded-full"
-                      style={{ background: 'var(--yola-terracotta)', color: '#fff' }}>
-                      {p.tag}
-                    </span>
+                  style={{ flexShrink: 0, width: `calc(${100 / visibleCount}% - 1rem)`, minWidth: "260px", background: "#fff", borderRadius: "10px", overflow: "hidden", border: "1px solid rgba(45,106,79,0.1)", transition: "box-shadow .25s, transform .25s" }}
+                  onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 10px 28px rgba(45,106,79,0.12)"; el.style.transform = "translateY(-2px)"; }}
+                  onMouseOut={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = ""; el.style.transform = ""; }}>
+                  <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
+                    <img src={p.img} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <span style={{ position: "absolute", top: "12px", left: "12px", background: R, color: "#fff", padding: "3px 10px", borderRadius: "4px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.05em" }}>{p.tag}</span>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2"
-                      style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--yola-bark)' }}>
-                      {p.name}
-                    </h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--yola-earth)', opacity: 0.8 }}>
-                      {p.desc}
-                    </p>
+                  <div style={{ padding: "18px 20px 20px" }}>
+                    <h3 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "17px", color: D, marginBottom: "6px" }}>{p.name}</h3>
+                    <p style={{ fontSize: "13px", color: GR, lineHeight: 1.5 }}>{p.desc}</p>
+                    <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: GL, fontWeight: 600 }}>
+                      <Icon name="Leaf" size={13} /> Натуральный продукт
+                    </div>
                   </div>
                 </div>
               ))}
@@ -276,29 +270,23 @@ export default function Index() {
 
             {carouselIdx > 0 && (
               <button onClick={prev}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 z-10"
-                style={{ background: 'var(--yola-earth)', color: '#fff' }}>
+                style={{ position: "absolute", left: "-18px", top: "50%", transform: "translateY(-50%)", width: "44px", height: "44px", background: G, color: "#fff", borderRadius: "50%", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(45,106,79,0.3)", zIndex: 10 }}>
                 <Icon name="ChevronLeft" size={20} />
               </button>
             )}
             {carouselIdx < maxIdx && (
               <button onClick={next}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 z-10"
-                style={{ background: 'var(--yola-earth)', color: '#fff' }}>
+                style={{ position: "absolute", right: "-18px", top: "50%", transform: "translateY(-50%)", width: "44px", height: "44px", background: G, color: "#fff", borderRadius: "50%", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(45,106,79,0.3)", zIndex: 10 }}>
                 <Icon name="ChevronRight" size={20} />
               </button>
             )}
           </div>
 
           {maxIdx > 0 && (
-            <div className="flex justify-center gap-2 mt-8">
+            <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "22px" }}>
               {Array.from({ length: maxIdx + 1 }).map((_, i) => (
                 <button key={i} onClick={() => setCarouselIdx(i)}
-                  className="h-2 rounded-full transition-all"
-                  style={{
-                    background: i === carouselIdx ? 'var(--yola-earth)' : 'rgba(107,63,42,0.25)',
-                    width: i === carouselIdx ? '24px' : '8px'
-                  }} />
+                  style={{ height: "6px", borderRadius: "3px", border: "none", cursor: "pointer", background: i === carouselIdx ? G : "rgba(45,106,79,0.2)", width: i === carouselIdx ? "28px" : "8px", transition: "all .2s" }} />
               ))}
             </div>
           )}
@@ -306,172 +294,157 @@ export default function Index() {
       </section>
 
       {/* О НАС */}
-      <section id="about" className="py-24 px-6 overflow-hidden" style={{ background: 'var(--yola-cream)' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-xs tracking-[0.4em] uppercase mb-4" style={{ color: 'var(--yola-terracotta)' }}>
-                История Йолы
-              </p>
-              <h2 className="text-5xl font-light italic mb-8 leading-tight"
-                style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                Мы выращиваем<br />
-                <span style={{ color: 'var(--yola-terracotta)' }}>с любовью к земле</span>
-              </h2>
-              <p className="mb-6 leading-relaxed" style={{ color: 'var(--yola-earth)', opacity: 0.85 }}>
-                Аграхолдинг Йола — это семейное хозяйство с многолетней историей. Мы убеждены, что качество начинается задолго до прилавка — с чистых пастбищ, свежего воздуха и уважительного отношения к каждому животному.
-              </p>
-              <p className="mb-10 leading-relaxed" style={{ color: 'var(--yola-earth)', opacity: 0.85 }}>
-                Наши угодья расположены вдали от промышленных зон. Животные питаются натуральным кормом, растут на свободном выгуле — это отражается в качестве и вкусе нашей продукции.
-              </p>
-
-              <div className="grid grid-cols-3 gap-6">
-                {[
-                  { num: "15+", label: "Лет работы" },
-                  { num: "2000", label: "Га пастбищ" },
-                  { num: "30+", label: "Видов продукции" },
-                ].map(s => (
-                  <div key={s.label} className="text-center p-4 rounded-2xl"
-                    style={{ background: 'rgba(107,63,42,0.08)' }}>
-                    <div className="text-4xl font-light italic mb-1"
-                      style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--yola-terracotta)' }}>
-                      {s.num}
-                    </div>
-                    <div className="text-xs tracking-wide" style={{ color: 'var(--yola-earth)' }}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
+      <section id="about" style={{ background: "#fff", padding: "80px 24px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "60px", alignItems: "center" }}>
+          {/* Фото */}
+          <div style={{ position: "relative" }}>
+            <div style={{ borderRadius: "12px", overflow: "hidden", aspectRatio: "4/3" }}>
+              <img src={HERO_IMAGE} alt="Ферма Йола" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
+            <div style={{ position: "absolute", bottom: "-18px", right: "24px", background: "#fff", border: `3px solid ${G}`, borderRadius: "10px", padding: "14px 20px", boxShadow: "0 8px 24px rgba(0,0,0,0.1)" }}>
+              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "28px", color: G, lineHeight: 1 }}>2000</div>
+              <div style={{ fontSize: "12px", color: GR, fontWeight: 600 }}>га пастбищ</div>
+            </div>
+            <div style={{ position: "absolute", top: "24px", left: "-5px", width: "5px", height: "80px", background: R, borderRadius: "0 4px 4px 0" }} />
+          </div>
 
-            <div className="relative h-[500px]">
-              <div className="absolute rounded-3xl overflow-hidden shadow-2xl"
-                style={{ top: 0, left: '5%', width: '70%', height: '60%' }}>
-                <img src={HERO_IMAGE} alt="Пастбища" className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute rounded-3xl overflow-hidden shadow-xl"
-                style={{ bottom: 0, right: 0, width: '58%', height: '55%', border: '4px solid var(--yola-cream)' }}>
-                <img src="https://cdn.poehali.dev/projects/ef865f98-91a8-4646-8ad7-ebc6b810f53e/files/27654ab0-0dde-4408-9cf5-e5078abcffcd.jpg"
-                  alt="Продукция" className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute blob-shape w-28 h-28 opacity-25"
-                style={{ background: 'var(--yola-terracotta)', bottom: '18%', left: '-2%', zIndex: 0 }} />
+          {/* Текст */}
+          <div>
+            <p style={{ color: R, fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "12px" }}>История Йолы</p>
+            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 40px)", color: D, lineHeight: 1.15, margin: "0 0 18px" }}>
+              Выращено с любовью<br /><span style={{ color: G }}>к земле и природе</span>
+            </h2>
+            <p style={{ color: GR, fontSize: "15px", lineHeight: 1.7, marginBottom: "14px" }}>
+              Аграхолдинг Йола — семейное хозяйство с многолетней историей. Качество начинается задолго до прилавка: с чистых пастбищ, свежего воздуха и бережного отношения к каждому животному.
+            </p>
+            <p style={{ color: GR, fontSize: "15px", lineHeight: 1.7, marginBottom: "28px" }}>
+              Наши угодья — вдали от промышленных зон. Животные питаются натуральным кормом на свободном выгуле.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { icon: "Leaf",        text: "Без ГМО, без антибиотиков, без гормонов роста" },
+                { icon: "Truck",       text: "Прямая доставка с фермы в магазины и рестораны" },
+                { icon: "ShieldCheck", text: "Ветеринарные сертификаты на всю продукцию" },
+              ].map(item => (
+                <div key={item.text} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <div style={{ width: "36px", height: "36px", background: GP, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Icon name={item.icon} size={18} style={{ color: G }} />
+                  </div>
+                  <p style={{ fontSize: "14px", color: D, margin: "8px 0 0", lineHeight: 1.45 }}>{item.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* КАРТА */}
-      <section id="stores" className="py-24 px-6" style={{ background: '#EDE5D8' }}>
-        <div className="max-w-6xl mx-auto">
-          <p className="text-center text-xs tracking-[0.4em] uppercase mb-3"
-            style={{ color: 'var(--yola-terracotta)' }}>Найдите нас</p>
-          <h2 className="text-center text-5xl font-light italic mb-16"
-            style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Наши магазины
-          </h2>
+      {/* МАГАЗИНЫ */}
+      <section id="stores" style={{ background: "#f7fcf8", padding: "80px 24px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <p style={{ color: R, fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>Найдите нас рядом</p>
+            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(26px, 4vw, 42px)", color: D, margin: 0 }}>Наши магазины</h2>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "36px" }}>
             {STORES.map((s, i) => (
               <div key={i}
-                className="rounded-2xl p-6 flex items-start gap-4 transition-all hover:shadow-lg hover:-translate-y-1"
-                style={{ background: '#fff' }}>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(107,63,42,0.1)' }}>
-                  <Icon name="MapPin" size={20} style={{ color: 'var(--yola-terracotta)' }} />
+                style={{ background: "#fff", borderRadius: "10px", padding: "20px 22px", border: "1px solid rgba(45,106,79,0.12)", display: "flex", gap: "14px", alignItems: "flex-start", transition: "box-shadow .2s, transform .2s" }}
+                onMouseOver={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 8px 24px rgba(45,106,79,0.1)"; el.style.transform = "translateY(-2px)"; }}
+                onMouseOut={e => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = ""; el.style.transform = ""; }}>
+                <div style={{ width: "44px", height: "44px", background: GP, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon name="MapPin" size={20} style={{ color: G }} />
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-1"
-                    style={{ color: 'var(--yola-bark)', fontFamily: 'Cormorant Garamond, serif', fontSize: '18px' }}>
-                    {s.name}
-                  </h4>
-                  <p className="text-sm" style={{ color: 'var(--yola-earth)', opacity: 0.75 }}>{s.address}</p>
+                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "15px", color: D, marginBottom: "4px" }}>{s.name}</div>
+                  <div style={{ fontSize: "13px", color: GR, marginBottom: "4px" }}>{s.address}</div>
+                  <div style={{ fontSize: "12px", color: GL, fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
+                    <Icon name="Clock" size={12} /> {s.hours}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ height: '420px', position: 'relative' }}>
+          <div style={{ borderRadius: "12px", overflow: "hidden", border: "2px solid rgba(45,106,79,0.15)", height: "400px" }}>
             <iframe
               src="https://yandex.ru/map-widget/v1/?ll=49.1221%2C55.7887&z=12&l=map"
-              width="100%"
-              height="100%"
-              style={{ border: 'none' }}
-              title="Карта магазинов Йола"
-            />
-            <div className="absolute inset-0 pointer-events-none rounded-3xl"
-              style={{ boxShadow: 'inset 0 0 0 2px rgba(107,63,42,0.15)' }} />
+              width="100%" height="100%"
+              style={{ border: "none", display: "block" }}
+              title="Карта магазинов Йола" />
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="py-16 px-6" style={{ background: 'var(--yola-bark)' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-10 mb-12">
-            <div className="md:col-span-2">
-              <div className="text-4xl font-light italic mb-2"
-                style={{ fontFamily: 'Cormorant Garamond, serif', color: 'var(--yola-sand)' }}>
-                ЙОЛА
-              </div>
-              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--yola-sage)' }}>Аграхолдинг</p>
-              <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(212,184,150,0.65)' }}>
-                Натуральная мясная продукция с экологически чистых пастбищ. С любовью к природе и уважением к вашему столу.
-              </p>
-            </div>
-
+      <footer style={{ background: D, padding: "56px 24px 32px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "40px", marginBottom: "48px" }}>
+            {/* Brand */}
             <div>
-              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--yola-sage)' }}>Навигация</p>
-              <div className="flex flex-col gap-3">
-                {["Продукция", "Покупателям", "Оптовикам", "О нас", "Магазины"].map(l => (
-                  <a key={l} href="#" className="text-sm transition-opacity hover:opacity-80"
-                    style={{ color: 'rgba(212,184,150,0.75)' }}>{l}</a>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
+                <div style={{ width: "36px", height: "36px", background: R, borderRadius: "7px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: "18px" }}>🌿</span>
+                </div>
+                <span style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "20px", color: "#fff", letterSpacing: "0.05em" }}>ЙОЛА</span>
+              </div>
+              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, maxWidth: "210px" }}>
+                Натуральная мясная продукция с экологически чистых пастбищ Республики Марий Эл.
+              </p>
+              <div style={{ marginTop: "18px", display: "flex", gap: "8px" }}>
+                {["Send", "Globe"].map(ic => (
+                  <a key={ic} href="#"
+                    style={{ width: "36px", height: "36px", background: "rgba(255,255,255,0.07)", borderRadius: "7px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Icon name={ic} size={16} style={{ color: "rgba(255,255,255,0.55)" }} />
+                  </a>
                 ))}
               </div>
             </div>
 
+            {/* Nav */}
             <div>
-              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--yola-sage)' }}>Контакты</p>
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(212,184,150,0.75)' }}>
-                  <Icon name="Phone" size={14} />
-                  +7 (XXX) XXX-XX-XX
-                </div>
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(212,184,150,0.75)' }}>
-                  <Icon name="Mail" size={14} />
-                  info@yola-agro.ru
-                </div>
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(212,184,150,0.75)' }}>
-                  <Icon name="MapPin" size={14} />
-                  Республика Марий Эл
-                </div>
-              </div>
-              <div className="flex gap-3 mt-6">
-                <a href="#"
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
-                  style={{ background: 'rgba(212,184,150,0.15)' }}>
-                  <Icon name="Send" size={16} style={{ color: 'var(--yola-sand)' }} />
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "14px" }}>Навигация</div>
+              {["Продукция", "Покупателям", "Оптовикам", "О нас", "Магазины"].map(l => (
+                <a key={l} href="#"
+                  style={{ display: "block", color: "rgba(255,255,255,0.45)", fontSize: "14px", textDecoration: "none", marginBottom: "9px" }}>
+                  {l}
                 </a>
-                <a href="#"
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:opacity-80"
-                  style={{ background: 'rgba(212,184,150,0.15)' }}>
-                  <Icon name="Globe" size={16} style={{ color: 'var(--yola-sand)' }} />
-                </a>
+              ))}
+            </div>
+
+            {/* Contacts */}
+            <div>
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "14px" }}>Контакты</div>
+              {[
+                { icon: "Phone",  text: "+7 (XXX) XXX-XX-XX" },
+                { icon: "Mail",   text: "info@yola-agro.ru" },
+                { icon: "MapPin", text: "Республика Марий Эл" },
+              ].map(c => (
+                <div key={c.text} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "11px", color: "rgba(255,255,255,0.45)", fontSize: "14px" }}>
+                  <Icon name={c.icon} size={14} style={{ color: "#74c69d", flexShrink: 0 }} />
+                  {c.text}
+                </div>
+              ))}
+            </div>
+
+            {/* Eco badge */}
+            <div>
+              <div style={{ background: "rgba(45,106,79,0.18)", border: "1px solid rgba(64,145,108,0.25)", borderRadius: "10px", padding: "20px" }}>
+                <div style={{ fontSize: "30px", marginBottom: "8px" }}>🌿</div>
+                <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "14px", color: "#74c69d", marginBottom: "6px" }}>Экосертификат</div>
+                <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>
+                  Вся продукция проходит ветеринарный контроль и соответствует стандартам экологически чистого производства
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
-            style={{ borderColor: 'rgba(212,184,150,0.15)' }}>
-            <p className="text-xs" style={{ color: 'rgba(212,184,150,0.4)' }}>
-              © 2024 Аграхолдинг Йола. Все права защищены.
-            </p>
-            <p className="text-xs" style={{ color: 'rgba(212,184,150,0.4)' }}>
-              Натуральный продукт · Экологически чистое производство
-            </p>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: "22px", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "10px" }}>
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.28)" }}>© 2024 Аграхолдинг Йола. Все права защищены.</p>
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.28)" }}>Натуральное · Экологичное · Фермерское</p>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
