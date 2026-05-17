@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 99%;
-    --foreground: 140 15% 10%;
+    --background: 40 78% 97%;
+    --foreground: 225 9% 7%;
 
     --card: 0 0% 100%;
     --card-foreground: 140 15% 10%;
@@ -35,16 +35,16 @@
     --radius: 0.5rem;
 
     /* Йола brand palette */
-    --y-green: #2d6a4f;
-    --y-green-light: #40916c;
-    --y-green-pale: #d8f3dc;
-    --y-red: #d62828;
-    --y-red-soft: #e63946;
-    --y-sand: #f5ead0;
-    --y-sand-dark: #e8d5a3;
+    --y-green: #8fb061;
+    --y-green-light: #a3c275;
+    --y-green-pale: #eef4e3;
+    --y-red: #df1c1d;
+    --y-red-soft: #f03233;
+    --y-sand: #fef7eb;
+    --y-sand-dark: #f5e8cc;
     --y-white: #ffffff;
-    --y-dark: #1a2e22;
-    --y-gray: #6b7c6e;
+    --y-dark: #101114;
+    --y-gray: #5a5d63;
   }
 }
 
@@ -74,8 +74,8 @@ html {
     -45deg,
     transparent,
     transparent 10px,
-    rgba(45, 106, 79, 0.04) 10px,
-    rgba(45, 106, 79, 0.04) 20px
+    rgba(143, 176, 97, 0.06) 10px,
+    rgba(143, 176, 97, 0.06) 20px
   );
 }
 
