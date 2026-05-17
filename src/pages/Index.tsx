@@ -68,7 +68,7 @@ export default function Index() {
     <div style={{ background: "#fff", color: D, fontFamily: "'Golos Text', sans-serif" }}>
 
       {/* NAV */}
-      <nav style={{ background: G, position: "fixed", top: 0, left: 0, right: 0, zIndex: 50 }}>
+      <nav style={{ background: D, position: "fixed", top: 0, left: 0, right: 0, zIndex: 50 }}>
         <div style={{ height: "4px", background: `linear-gradient(90deg, ${R} 0%, #f4a261 50%, ${R} 100%)` }} />
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "66px" }}>
           {/* Logo */}
@@ -133,7 +133,7 @@ export default function Index() {
           <h1 className="animate-fade-in-up delay-400"
             style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5.5vw, 68px)", color: "#fff", lineHeight: 1.12, margin: "0 0 18px", opacity: 0 }}>
             Мясо с фермы —<br />
-            <span style={{ color: "#74c69d" }}>прямо к вашему столу</span>
+            <span style={{ color: "#FEF7EB" }}>прямо к вашему столу</span>
           </h1>
           <p className="animate-fade-in-up delay-600"
             style={{ color: "rgba(255,255,255,0.78)", fontSize: "17px", lineHeight: 1.65, marginBottom: "34px", maxWidth: "460px", opacity: 0 }}>
